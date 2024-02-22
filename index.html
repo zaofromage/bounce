@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prout</title>
+    <style>
+        img {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <img id="prout" src="alpha.jpg" alt="gros alpha">
+    <script>
+        let image = document.getElementById("prout");
+        let rect;
+        let width, height;
+        let x = 500;
+        let y = 500;
+        let vX = 1;
+        let vY = -1;
+        (function update(){
+            width = window.innerWidth;
+            height = window.innerHeight;
+            rect = image.getBoundingClientRect();
+            detectWall();
+            console.log(vX, vY);
+            image.style.left = x + "px";
+            image.style.top  = y + "px";
+            x += vX;
+            y += vY;
+            requestAnimationFrame(update);
+        })();
+
+        function detectWall(){
+            if (rect.top < 0 && vY < 0) {
+                vY = -vY;
+                vY++;
+            }
+            if (rect.bottom > height && vY > 0) {
+                vY = -vY;
+                vY--;
+            }
+            if (rect.left < 0 && vX < 0) {
+                vX = -vX;
+                vX++;
+            }
+            if (rect.right > width && vX > 0) {
+                vX = -vX;
+                vX--;
+            }
+        }
+    </script>
+</body>
+</html>
