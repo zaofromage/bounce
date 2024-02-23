@@ -5,10 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prout</title>
     <style>
+        @keyframes gelatine {
+            from, to { transform: scale(1, 1); }
+            25% { transform: scale(0.9, 1.1); }
+            50% { transform: scale(1.1, 0.9); }
+            75% { transform: scale(0.95, 1.05); }
+        }
+
+        @keyframes bounceUp {
+            from, to {
+                transform: scale(1, 1);
+            }
+            33% {
+                transform: scale(1, 0.5);
+            }
+            66% {
+                transform: scale(0.5, 1);
+            }
+        }
+
+        @keyframes bounceSide {
+            from, to {
+                transform: scale(1, 1);
+            }
+            33% {
+                transform: scale(0.5, 1);
+            }
+            66% {
+                transform: scale(1, 0.5);
+            }
+        }
+
         img {
             width: 100px;
             height: 100px;
             position: absolute;
+            border-radius: 50%;
+            animation: gelatine 1.5s linear 0s infinite alternate;
         }
     </style>
 </head>
@@ -18,6 +51,7 @@
         let image = document.getElementById("prout");
         let rect;
         let width, height;
+        let bounceOffset;
         let x = 500;
         let y = 500;
         let vX = 1;
@@ -26,33 +60,63 @@
             width = window.innerWidth;
             height = window.innerHeight;
             rect = image.getBoundingClientRect();
-            detectWall();
-            console.log(vX, vY);
+            detectWall(10);
             image.style.left = x + "px";
             image.style.top  = y + "px";
             x += vX;
             y += vY;
+            console.log(vX, vY);
+            bounce(30);
             requestAnimationFrame(update);
         })();
 
-        function detectWall(){
+        function detectWall(seuil){
             if (rect.top < 0 && vY < 0) {
                 vY = -vY;
-                vY++;
+                if (vY <= seuil){
+                    vY++;
+                }
             }
             if (rect.bottom > height && vY > 0) {
                 vY = -vY;
-                vY--;
+                if (vY <= -seuil) {
+                    vY--;
+                }
             }
             if (rect.left < 0 && vX < 0) {
                 vX = -vX;
-                vX++;
+                if (vX <= seuil) {
+                    vX++;
+                }
             }
             if (rect.right > width && vX > 0) {
                 vX = -vX;
-                vX--;
+                if (vX <= seuil) {
+                    vX--;
+                }
             }
         }
+
+        function bounce(offset){
+            let timeUp = 1/vY;
+            let timeSide = 1/vX;
+            if (rect.top < offset) {
+                image.style.animation = "bounceUp "+ timeUp +"s linear 0s 1 normal"
+            }
+            else if (rect.bottom > height-offset) {
+                image.style.animation = "bounceUp " + timeUp +"s linear 0s 1 normal"
+            }
+            else if (rect.left < offset) {
+                image.style.animation = "bounceSide " + timeSide + "s linear 0s 1 normal"
+            }
+            else if (rect.right > width -offset) {
+                image.style.animation = "bounceSide " + timeSide + "s linear 0s 1 normal"
+            }
+            else {
+                image.style.animation = "gelatine 1.5s linear 0s infinite alternate"
+            }
+        }
+
     </script>
 </body>
 </html>
