@@ -12,12 +12,19 @@
             75% { transform: scale(0.95, 1.05); }
         }
 
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         #prout {
             width: 100px;
             height: 100px;
             position: absolute;
             border-radius: 50%;
-            transition: all 0.14s linear;        
+            transition: all 0.14s linear;   
+            z-index: 999;     
         }
 
         #photos {
@@ -28,6 +35,16 @@
             width: 50%;
             border: red 3px solid;
         }
+
+        p {
+            background-color: orange;
+            border: orangered 2px solid;
+            text-align: center;
+            width:25vw;
+            border-radius: 5px;
+            animation: 1s linear 0s infinite gelatine;
+        }
+
     </style>
 </head>
 <body>
@@ -38,6 +55,7 @@
         <img src="alphaGentil.jpg" alt="alphaGentil">
         <img src="gralpha.jpg" alt="gralphaCast">
     </div>
+    <p id="exit">EXIT</p>
     <script>
         let image = document.getElementById("prout");
         let rect;
@@ -50,6 +68,7 @@
         let y = height/2;
         let vX = 1;
         let vY = -1;
+        let prout = new Audio('prout.mp3');
         let easterEgg = false;
         (function update(){
             width = window.innerWidth;
@@ -66,9 +85,14 @@
 
         image.addEventListener("click", function(evt){
             if (!easterEgg){
+                easterEgg = true;
                 image.src = "gotaga.jpg";
             }
         });
+
+        document.getElementById("exit").addEventListener("click", function(evt){
+            prout.play();
+        })
 
         function detectWall(seuil){
             if (rect.top < 0 && vY < 0) {
