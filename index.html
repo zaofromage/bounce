@@ -50,6 +50,7 @@
         let y = height/2;
         let vX = 1;
         let vY = -1;
+        let easterEgg = false;
         (function update(){
             width = window.innerWidth;
             height = window.innerHeight;
@@ -62,6 +63,12 @@
             bounce();
             requestAnimationFrame(update);
         })();
+
+        image.addEventListener("click", function(evt){
+            if (!easterEgg){
+                image.src = "gotaga.jpg";
+            }
+        });
 
         function detectWall(seuil){
             if (rect.top < 0 && vY < 0) {
