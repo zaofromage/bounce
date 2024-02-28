@@ -18,6 +18,10 @@
             align-items: center;
         }
 
+        embed {
+            width: 66vw;
+        }
+
         #prout {
             width: 100px;
             height: 100px;
@@ -55,6 +59,13 @@
         <img src="alphaGentil.jpg" alt="alphaGentil">
         <img src="gralpha.jpg" alt="gralphaCast">
     </div>
+    <form action="/" method="get">
+        <h3>Paramètres ton alpha (à vos risques et périls)</h3>
+        <label for="pmax">Puissance max :</label>
+        <input type="number" name="pmax" id="pmax" max="30">
+        <label for="taille">Taille : </label>
+        <input type="number" name="taille" id="taille">
+    </form>
     <p id="exit">EXIT</p>
     <script>
         let image = document.getElementById("prout");
@@ -70,11 +81,16 @@
         let vY = -1;
         let prout = new Audio('prout.mp3');
         let easterEgg = false;
+        let exit = document.getElementById("exit");
+        let pmax = document.getElementById("pmax");
+        let taille = document.getElementById("taille");
         (function update(){
             width = window.innerWidth;
             height = window.innerHeight;
             rect = image.getBoundingClientRect();
-            detectWall(10);
+            detectWall(parseInt(pmax.value)??10);
+            image.style.height = taille.value + "px";
+            image.style.width = taille.value + "px";
             image.style.left = x + "px";
             image.style.top  = y + "px";
             x += vX;
@@ -88,13 +104,29 @@
                 easterEgg = true;
                 image.src = "gotaga.jpg";
             }
+            else {
+                image.src = "alpha.jpg";
+                easterEgg = false;
+            }
         });
 
-        document.getElementById("exit").addEventListener("click", function(evt){
+        exit.addEventListener("click", function(evt){
             prout.play();
         })
 
+        exit.addEventListener("mouseenter", function(evt){
+            exit.innerText = "💩";
+        })
+
+        exit.addEventListener("mouseleave", function(evt){
+            exit.innerText = "EXIT";
+        })
+
         function detectWall(seuil){
+            if (vX > seuil || vY > seuil){
+                vX = seuil;
+                vY = seuil;
+            }
             if (rect.top < 0 && vY < 0) {
                 vY = -vY;
                 if (vY < seuil){
